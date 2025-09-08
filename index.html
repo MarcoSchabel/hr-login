@@ -124,18 +124,8 @@
     const el = (id) => document.getElementById(id);
     const setError = (m) => el('error').textContent = m || "";
 
-    el('btnSignIn').addEventListener('click', async () => {
-      setError("");
-      const email = el('email').value.trim();
-      const password = el('pw').value;
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return setError(error.message);
-
-      // JWT vom eingeloggten User holen
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return setError("Keine Session gefunden.");
-
-      // Edge Function aufrufen, um Retool-Embed-URL zu bekommen
+    // Shared function für Embed URL abrufen und redirect
+    async function redirectToRetool(session) {
       const resp = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: {
@@ -146,20 +136,55 @@
 
       if (!resp.ok) {
         const t = await resp.text();
-        return setError("Embed-Fehler: " + t);
+        throw new Error("Embed-Fehler: " + t);
       }
 
       const { embedUrl } = await resp.json();
-
-      // Automatischer Redirect mit replace (kein History-Eintrag)
       window.location.replace(embedUrl);
+    }
+
+    // Check if user is already logged in
+    async function checkExistingSession() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return; // Keine Session = Login Form anzeigen
+        
+        // Session existiert = automatisch weiterleiten
+        await redirectToRetool(session);
+      } catch (e) {
+        // Fehler ignorieren, User kann manuell einloggen
+        console.log("Session check failed:", e.message);
+      }
+    }
+
+    el('btnSignIn').addEventListener('click', async () => {
+      setError("");
+      const email = el('email').value.trim();
+      const password = el('pw').value;
+      
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) return setError(error.message);
+
+        // JWT vom eingeloggten User holen
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return setError("Keine Session gefunden.");
+
+        await redirectToRetool(session);
+      } catch (e) {
+        setError(e.message);
+      }
     });
 
     el('btnSignOut').addEventListener('click', async () => {
       setError("");
       const { error } = await supabase.auth.signOut();
       if (error) return setError(error.message);
+      setError("Erfolgreich abgemeldet.");
     });
+
+    // Check for existing session on page load
+    checkExistingSession();
   </script>
 </body>
 
