@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="de">
-
 <head>
   <meta charset="utf-8" />
   <title>HR Login</title>
@@ -13,25 +12,19 @@
       --muted: #9fb0d0;
       --accent: #66a3ff
     }
-
-    * {
-      box-sizing: border-box
-    }
-
+    * { box-sizing: border-box }
     body {
       margin: 0;
       background: linear-gradient(160deg, #0c1222, #0e1730);
       color: var(--text);
       font-family: system-ui
     }
-
     .wrap {
       min-height: 100vh;
       display: grid;
       place-items: center;
       padding: 24px
     }
-
     .card {
       width: min(560px, 94vw);
       background: var(--card);
@@ -39,19 +32,13 @@
       padding: 24px;
       box-shadow: 0 14px 40px rgba(0, 0, 0, .35)
     }
-
-    h1 {
-      margin: 0 0 16px;
-      font-size: 22px
-    }
-
+    h1 { margin: 0 0 16px; font-size: 22px }
     label {
       display: block;
       margin: 10px 0 6px;
       color: #cdd9f5;
       font-size: 13px
     }
-
     input {
       width: 100%;
       padding: 12px 14px;
@@ -60,14 +47,12 @@
       background: #0c1430;
       color: var(--text)
     }
-
     .row {
       display: flex;
       gap: 10px;
       margin-top: 12px;
       flex-wrap: wrap
     }
-
     button {
       flex: 1;
       min-width: 140px;
@@ -79,88 +64,105 @@
       font-weight: 600;
       cursor: pointer
     }
-
     button.secondary {
       background: #26345c;
       color: #eaf0ff
     }
-
     .err {
       margin-top: 10px;
       color: #ff9aa8;
       min-height: 18px
     }
   </style>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
   <div class="wrap">
     <div class="card">
       <h1>HR Login</h1>
-
       <label for="email">E-Mail</label>
       <input id="email" type="email" autocomplete="username" placeholder="du@firma.de" required />
-
       <label for="pw">Passwort</label>
       <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••" required />
-
       <div class="row">
         <button id="btnSignIn">Einloggen</button>
         <button id="btnSignOut" class="secondary">Logout</button>
       </div>
-
       <div class="err" id="error"></div>
     </div>
   </div>
 
-  <script>
-    // Deine Supabase Daten
+  <script type="module">
+    // 🆕 ES6 Modules (moderner)
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // 🔧 DEINE KONFIGURATION
     const SUPABASE_URL = "https://rrzenypyvagcopfaplas.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVueXB5dmFnY29wZmFwbGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDU1NjcsImV4cCI6MjA1ODk4MTU2N30.Ja7n70vI2YrEXQueM0C2FX7QydeCdLkEaO2gGyl_lUo";
-    const FUNCTION_URL = "https://rrzenypyvagcopfaplas.supabase.co/functions/v1/get_embed_url";
+    
+    // 🆕 KANONISCHES FORMAT für Functions URL
+    const FUNCTION_URL = "https://rrzenypyvagcopfaplas.functions.supabase.co/get_embed_url";
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 🆕 EXPLIZITE SESSION PERSISTENCE
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: true }
+    });
+
     const el = (id) => document.getElementById(id);
     const setError = (m) => el('error').textContent = m || "";
 
+    // 🎯 Get embed URL and redirect
+    async function gotoApp() {
+      try {
+        // 🆕 Erst getUser() aufrufen (verhindert Browser-Warnungen)
+        await supabase.auth.getUser();
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) return; // Nicht eingeloggt
+
+        const resp = await fetch(FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${session.access_token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!resp.ok) {
+          const text = await resp.text();
+          return setError("Embed-Fehler: " + text);
+        }
+
+        const { embedUrl } = await resp.json();
+        
+        // 🚀 TOP-LEVEL REDIRECT (single-use URL ohne History)
+        window.location.replace(embedUrl);
+      } catch (e) {
+        setError("Verbindungsfehler: " + e.message);
+      }
+    }
+
+    // 🔄 Check if already logged in on page load
+    gotoApp().catch(console.error);
+
+    // 🔐 Login handler
     el('btnSignIn').addEventListener('click', async () => {
       setError("");
       const email = el('email').value.trim();
       const password = el('pw').value;
+      
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) return setError(error.message);
 
-      // JWT vom eingeloggten User holen
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return setError("Keine Session gefunden.");
-
-      // Edge Function aufrufen, um Retool-Embed-URL zu bekommen
-      const resp = await fetch(FUNCTION_URL, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${session.access_token}`,
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (!resp.ok) {
-        const t = await resp.text();
-        return setError("Embed-Fehler: " + t);
-      }
-
-      const { embedUrl } = await resp.json();
-
-      // Automatischer Redirect
-      window.location.href = embedUrl;
+      await gotoApp();
     });
 
+    // 🚪 Logout handler
     el('btnSignOut').addEventListener('click', async () => {
       setError("");
       const { error } = await supabase.auth.signOut();
       if (error) return setError(error.message);
+      setError("Erfolgreich abgemeldet.");
     });
   </script>
 </body>
-
 </html>
