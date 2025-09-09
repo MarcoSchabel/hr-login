@@ -1,121 +1,232 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-
 <head>
-  <meta charset="utf-8" />
-  <title>HR Login</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR Login - better decisions GmbH</title>
+  
   <style>
-    :root {
-      --bg: #0c1222;
-      --card: #141c33;
-      --text: #eaf0ff;
-      --muted: #9fb0d0;
-      --accent: #66a3ff
-    }
-
     * {
-      box-sizing: border-box
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      background: linear-gradient(160deg, #0c1222, #0e1730);
-      color: var(--text);
-      font-family: system-ui
-    }
-
-    .wrap {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px
-    }
-
-    .card {
-      width: min(560px, 94vw);
-      background: var(--card);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, .35)
-    }
-
-    h1 {
-      margin: 0 0 16px;
-      font-size: 22px
-    }
-
-    label {
-      display: block;
-      margin: 10px 0 6px;
-      color: #cdd9f5;
-      font-size: 13px
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #2a3558;
-      background: #0c1430;
-      color: var(--text)
-    }
-
-    .row {
+      background: linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 25%, #81c3d7 50%, #7fb3d3 75%, #5dade2 100%);
       display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
-    button {
-      flex: 1;
-      min-width: 140px;
-      padding: 12px;
-      border: 0;
+    .login-container {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 40px 32px 32px 32px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo {
+      display: inline-block;
+      border: 2px solid #000000;
+      padding: 8px 12px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000000;
+      margin-bottom: 24px;
+      font-family: monospace;
+    }
+
+    .welcome-title {
+      color: #000000;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 32px;
+      line-height: 1.4;
+    }
+
+    .form-field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0df;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 16px;
+      line-height: 1.5;
+      transition: border-color 0.15s ease-in-out;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #000000;
+    }
+
+    .form-input::placeholder {
+      color: #80807f;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 12px 24px;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
       border-radius: 10px;
-      background: var(--accent);
-      color: #051029;
+      font-size: 16px;
       font-weight: 600;
-      cursor: pointer
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+      margin-top: 8px;
     }
 
-    button.secondary {
-      background: #26345c;
-      color: #eaf0ff
+    .submit-button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
     }
 
-    .err {
-      margin-top: 10px;
-      color: #ff9aa8;
-      min-height: 18px
+    .logout-button {
+      width: 100%;
+      padding: 12px 24px;
+      background-color: transparent;
+      color: #161616;
+      border: 1px solid #000000;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      margin-top: 8px;
+    }
+
+    .logout-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 16px;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .footer-links {
+      color: #80807f;
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      color: #161616;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      text-decoration-color: rgba(73, 73, 69, 0.18);
+    }
+
+    .footer-links a:hover {
+      text-decoration-color: rgba(18, 18, 17, 0.73);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 480px) {
+      .login-container {
+        margin: 20px;
+        padding: 32px 24px 24px 24px;
+      }
+      
+      .footer {
+        position: static;
+        margin-top: 40px;
+        transform: none;
+      }
     }
   </style>
+  
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>HR Login</h1>
-
-      <label for="email">E-Mail</label>
-      <input id="email" type="email" autocomplete="username" placeholder="du@firma.de" required />
-
-      <label for="pw">Passwort</label>
-      <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••" required />
-
-      <div class="row">
-        <button id="btnSignIn">Einloggen</button>
-        <button id="btnSignOut" class="secondary">Logout</button>
+  <div class="login-container">
+    <div class="logo">
+      <svg width="80" height="80" viewBox="0 0 255.32 255.32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .cls-1 {
+              fill: #1d1d1b;
+              stroke-width: 0px;
+            }
+          </style>
+        </defs>
+        <g>
+          <path class="cls-1" d="M150.1,127.66c0-12.47,2.93-22.42,8.79-29.87,5.86-7.44,13.64-11.17,23.34-11.17,9.15,0,16.35,3.19,21.59,9.57l.82-8.09h16.25v77.84c0,10.54-3.28,18.85-9.83,24.93-6.55,6.08-15.4,9.13-26.53,9.13-5.89,0-11.64-1.22-17.25-3.67-5.61-2.45-9.88-5.65-12.8-9.61l8.53-10.83c5.54,6.58,12.37,9.87,20.48,9.87,5.99,0,10.71-1.62,14.17-4.86,3.46-3.24,5.19-8,5.19-14.28v-5.42c-5.19,5.79-12.12,8.68-20.78,8.68-9.4,0-17.08-3.73-23.04-11.2-5.96-7.47-8.94-17.81-8.94-31.02ZM168.05,129.21c0,8.06,1.64,14.41,4.93,19.03,3.29,4.63,7.85,6.94,13.69,6.94,7.27,0,12.66-3.12,16.18-9.35v-35.32c-3.41-6.08-8.76-9.13-16.03-9.13-5.94,0-10.55,2.35-13.84,7.05-3.29,4.7-4.93,11.63-4.93,20.78Z"/>
+          <path class="cls-1" d="M121.87,169.89c-10.01,0-17.83-3.63-23.44-10.88-5.61-7.26-8.42-17.44-8.42-30.55s2.84-23.4,8.53-30.73c5.68-7.33,13.56-10.99,23.62-10.99s18.58,3.89,24.09,11.68h.87c-.82-5.76-1.23-10.3-1.23-13.64v-29.24h17.13v112.92h-13.35l-2.98-10.52h-.8c-5.47,7.98-13.47,11.97-24.02,11.97ZM126.44,156.1c7.02,0,12.12-1.97,15.31-5.91s4.84-10.34,4.94-19.19v-2.4c0-10.11-1.65-17.29-4.94-21.55-3.29-4.26-8.44-6.39-15.46-6.39-6,0-10.62,2.43-13.86,7.29-3.24,4.86-4.86,11.79-4.86,20.79s1.57,15.69,4.72,20.36c3.14,4.67,7.86,7,14.15,7Z"/>
+          <path class="cls-1" d="M104.26,129.26c0,12.35-2.76,22.17-8.27,29.47-5.51,7.3-13.1,10.95-22.75,10.95s-16.56-3.36-21.76-10.07l-.88,8.6h-16.17V55.32h17.86v41.01c5.14-6.07,12.08-9.11,20.8-9.11,9.7,0,17.32,3.6,22.86,10.8,5.54,7.2,8.31,17.27,8.31,30.21v1.03ZM86.4,127.71c0-8.62-1.52-15.09-4.56-19.41-3.04-4.31-7.45-6.47-13.23-6.47-7.74,0-13.18,3.38-16.32,10.14v32.78c3.18,6.91,8.67,10.36,16.46,10.36,5.59,0,9.9-2.08,12.94-6.25,3.04-4.16,4.61-10.46,4.7-18.89v-2.28Z"/>
+        </g>
+        <path class="cls-1" d="M255.32,255.32H0V0h255.32v255.32ZM17.32,238h220.67V17.32H17.32v220.67Z"/>
+      </svg>
+    </div>
+    
+    <h1 class="welcome-title">Willkommen bei better<br>decisions GmbH</h1>
+    
+    <form novalidate>
+      <div class="form-field">
+        <input 
+          class="form-input" 
+          id="email" 
+          name="email" 
+          type="email" 
+          autocomplete="email" 
+          autocapitalize="none" 
+          spellcheck="false" 
+          placeholder="E-Mail-Adresse" 
+          required 
+          autofocus>
       </div>
 
-      <div class="err" id="error"></div>
-    </div>
+      <div class="form-field">
+        <input 
+          class="form-input" 
+          id="pw" 
+          name="password" 
+          type="password" 
+          autocomplete="current-password" 
+          placeholder="Passwort" 
+          required>
+      </div>
+
+      <button type="button" class="submit-button" id="btnSignIn">
+        Login
+      </button>
+
+      <button type="button" class="logout-button" id="btnSignOut" style="display: none;">
+        Logout
+      </button>
+
+      <div class="error-message" id="error"></div>
+    </form>
   </div>
 
   <script>
-    // Deine Supabase Daten
+    // Deine Supabase Daten - UNVERÄNDERT
     const SUPABASE_URL = "https://rrzenypyvagcopfaplas.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVueXB5dmFnY29wZmFwbGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDU1NjcsImV4cCI6MjA1ODk4MTU2N30.Ja7n70vI2YrEXQueM0C2FX7QydeCdLkEaO2gGyl_lUo";
     const FUNCTION_URL = "https://rrzenypyvagcopfaplas.supabase.co/functions/v1/get_embed_url";
@@ -124,7 +235,7 @@
     const el = (id) => document.getElementById(id);
     const setError = (m) => el('error').textContent = m || "";
 
-    // Shared function für Embed URL abrufen und redirect
+    // Shared function für Embed URL abrufen und redirect - UNVERÄNDERT
     async function redirectToRetool(session) {
       const resp = await fetch(FUNCTION_URL, {
         method: "POST",
@@ -143,7 +254,7 @@
       window.location.replace(embedUrl);
     }
 
-    // Check if user is already logged in
+    // Check if user is already logged in - UNVERÄNDERT
     async function checkExistingSession() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -157,6 +268,7 @@
       }
     }
 
+    // Login Event Handler - UNVERÄNDERT
     el('btnSignIn').addEventListener('click', async () => {
       setError("");
       const email = el('email').value.trim();
@@ -176,6 +288,7 @@
       }
     });
 
+    // Logout Event Handler - UNVERÄNDERT
     el('btnSignOut').addEventListener('click', async () => {
       setError("");
       const { error } = await supabase.auth.signOut();
@@ -183,9 +296,8 @@
       setError("Erfolgreich abgemeldet.");
     });
 
-    // Check for existing session on page load
+    // Check for existing session on page load - UNVERÄNDERT
     checkExistingSession();
   </script>
 </body>
-
 </html>
