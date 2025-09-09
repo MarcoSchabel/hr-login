@@ -102,6 +102,7 @@
       cursor: pointer;
       transition: all 0.15s ease-in-out;
       margin-top: 8px;
+      display: none; /* bleibt auf der Login-Seite standardmäßig verborgen */
     }
 
     .logout-button:hover {
@@ -114,6 +115,14 @@
       margin-top: 16px;
       min-height: 20px;
       text-align: center;
+    }
+
+    .info-message {
+      color: #2a2a2a;
+      font-size: 14px;
+      margin-top: 12px;
+      text-align: center;
+      min-height: 18px;
     }
 
     .footer {
@@ -173,125 +182,4 @@
         <g>
           <path class="cls-1" d="M150.1,127.66c0-12.47,2.93-22.42,8.79-29.87,5.86-7.44,13.64-11.17,23.34-11.17,9.15,0,16.35,3.19,21.59,9.57l.82-8.09h16.25v77.84c0,10.54-3.28,18.85-9.83,24.93-6.55,6.08-15.4,9.13-26.53,9.13-5.89,0-11.64-1.22-17.25-3.67-5.61-2.45-9.88-5.65-12.8-9.61l8.53-10.83c5.54,6.58,12.37,9.87,20.48,9.87,5.99,0,10.71-1.62,14.17-4.86,3.46-3.24,5.19-8,5.19-14.28v-5.42c-5.19,5.79-12.12,8.68-20.78,8.68-9.4,0-17.08-3.73-23.04-11.2-5.96-7.47-8.94-17.81-8.94-31.02ZM168.05,129.21c0,8.06,1.64,14.41,4.93,19.03,3.29,4.63,7.85,6.94,13.69,6.94,7.27,0,12.66-3.12,16.18-9.35v-35.32c-3.41-6.08-8.76-9.13-16.03-9.13-5.94,0-10.55,2.35-13.84,7.05-3.29,4.7-4.93,11.63-4.93,20.78Z"/>
           <path class="cls-1" d="M121.87,169.89c-10.01,0-17.83-3.63-23.44-10.88-5.61-7.26-8.42-17.44-8.42-30.55s2.84-23.4,8.53-30.73c5.68-7.33,13.56-10.99,23.62-10.99s18.58,3.89,24.09,11.68h.87c-.82-5.76-1.23-10.3-1.23-13.64v-29.24h17.13v112.92h-13.35l-2.98-10.52h-.8c-5.47,7.98-13.47,11.97-24.02,11.97ZM126.44,156.1c7.02,0,12.12-1.97,15.31-5.91s4.84-10.34,4.94-19.19v-2.4c0-10.11-1.65-17.29-4.94-21.55-3.29-4.26-8.44-6.39-15.46-6.39-6,0-10.62,2.43-13.86,7.29-3.24,4.86-4.86,11.79-4.86,20.79s1.57,15.69,4.72,20.36c3.14,4.67,7.86,7,14.15,7Z"/>
-          <path class="cls-1" d="M104.26,129.26c0,12.35-2.76,22.17-8.27,29.47-5.51,7.3-13.1,10.95-22.75,10.95s-16.56-3.36-21.76-10.07l-.88,8.6h-16.17V55.32h17.86v41.01c5.14-6.07,12.08-9.11,20.8-9.11,9.7,0,17.32,3.6,22.86,10.8,5.54,7.2,8.31,17.27,8.31,30.21v1.03ZM86.4,127.71c0-8.62-1.52-15.09-4.56-19.41-3.04-4.31-7.45-6.47-13.23-6.47-7.74,0-13.18,3.38-16.32,10.14v32.78c3.18,6.91,8.67,10.36,16.46,10.36,5.59,0,9.9-2.08,12.94-6.25,3.04-4.16,4.61-10.46,4.7-18.89v-2.28Z"/>
-        </g>
-        <path class="cls-1" d="M255.32,255.32H0V0h255.32v255.32ZM17.32,238h220.67V17.32H17.32v220.67Z"/>
-      </svg>
-    </div>
-    
-    <h1 class="welcome-title">Willkommen bei better<br>decisions GmbH</h1>
-    
-    <form novalidate>
-      <div class="form-field">
-        <input 
-          class="form-input" 
-          id="email" 
-          name="email" 
-          type="email" 
-          autocomplete="email" 
-          autocapitalize="none" 
-          spellcheck="false" 
-          placeholder="E-Mail-Adresse" 
-          required 
-          autofocus>
-      </div>
-
-      <div class="form-field">
-        <input 
-          class="form-input" 
-          id="pw" 
-          name="password" 
-          type="password" 
-          autocomplete="current-password" 
-          placeholder="Passwort" 
-          required>
-      </div>
-
-      <button type="button" class="submit-button" id="btnSignIn">
-        Login
-      </button>
-
-      <button type="button" class="logout-button" id="btnSignOut" style="display: none;">
-        Logout
-      </button>
-
-      <div class="error-message" id="error"></div>
-    </form>
-  </div>
-
-  <script>
-    // Deine Supabase Daten - UNVERÄNDERT
-    const SUPABASE_URL = "https://rrzenypyvagcopfaplas.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVueXB5dmFnY29wZmFwbGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDU1NjcsImV4cCI6MjA1ODk4MTU2N30.Ja7n70vI2YrEXQueM0C2FX7QydeCdLkEaO2gGyl_lUo";
-    const FUNCTION_URL = "https://rrzenypyvagcopfaplas.supabase.co/functions/v1/get_embed_url";
-
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const el = (id) => document.getElementById(id);
-    const setError = (m) => el('error').textContent = m || "";
-
-    // Shared function für Embed URL abrufen und redirect - UNVERÄNDERT
-    async function redirectToRetool(session) {
-      const resp = await fetch(FUNCTION_URL, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${session.access_token}`,
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (!resp.ok) {
-        const t = await resp.text();
-        throw new Error("Embed-Fehler: " + t);
-      }
-
-      const { embedUrl } = await resp.json();
-      window.location.replace(embedUrl);
-    }
-
-    // Check if user is already logged in - UNVERÄNDERT
-    async function checkExistingSession() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return; // Keine Session = Login Form anzeigen
-        
-        // Session existiert = automatisch weiterleiten
-        await redirectToRetool(session);
-      } catch (e) {
-        // Fehler ignorieren, User kann manuell einloggen
-        console.log("Session check failed:", e.message);
-      }
-    }
-
-    // Login Event Handler - UNVERÄNDERT
-    el('btnSignIn').addEventListener('click', async () => {
-      setError("");
-      const email = el('email').value.trim();
-      const password = el('pw').value;
-      
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) return setError(error.message);
-
-        // JWT vom eingeloggten User holen
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return setError("Keine Session gefunden.");
-
-        await redirectToRetool(session);
-      } catch (e) {
-        setError(e.message);
-      }
-    });
-
-    // Logout Event Handler - UNVERÄNDERT
-    el('btnSignOut').addEventListener('click', async () => {
-      setError("");
-      const { error } = await supabase.auth.signOut();
-      if (error) return setError(error.message);
-      setError("Erfolgreich abgemeldet.");
-    });
-
-    // Check for existing session on page load - UNVERÄNDERT
-    checkExistingSession();
-  </script>
-</body>
-</html>
+          <path class="cls-1" d="M104.26,129.26c0,12.35-2.76,22.17-8.27,29.47-5.51,7.3-13.1,10.95-22.75,10.95s-16.56-3.36-21.76-10.07l-.88,8.6h-16.17V55.32h17.86v41.01c5.14-6.07,12.08-9.11,20.8-9.11,9
